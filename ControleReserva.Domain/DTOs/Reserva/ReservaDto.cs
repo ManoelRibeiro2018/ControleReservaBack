@@ -1,5 +1,5 @@
-﻿using ControleReserva.Domain.Enum;
-using ControleReserva.Domain.Usuario;
+﻿using ControleReserva.Domain.DTOs.Usuario;
+using ControleReserva.Domain.Enum;
 
 namespace ControleReserva.Domain.DTOs.Reserva
 {

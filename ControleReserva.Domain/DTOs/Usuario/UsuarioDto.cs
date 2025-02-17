@@ -1,4 +1,4 @@
-﻿namespace ControleReserva.Domain.Usuario
+﻿namespace ControleReserva.Domain.DTOs.Usuario
 {
     public class UsuarioDto
     {

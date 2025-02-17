@@ -1,12 +1,13 @@
 ﻿using ControleReserva.Domain.DTOs.Reserva;
 using ControleReserva.Domain.Enum;
-using ControleReserva.Domain.Interface.Service;
+using ControleReserva.Domain.Interface.Repository;
 
-namespace ControleReserva.Application.Service
+namespace ControleReserva.Infraestructure.Repository
 {
-    public class ReservaService : IReservaService
+    public class ReservaRepository : IReservaRepository
     {
-        public Task ChangeStatus(int id, Status status)
+
+        public async Task ChangeStatus(int id, Status status)
         {
             throw new NotImplementedException();
         }

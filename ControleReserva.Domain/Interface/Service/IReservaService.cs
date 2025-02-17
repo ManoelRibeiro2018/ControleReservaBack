@@ -1,7 +1,7 @@
 ﻿using ControleReserva.Domain.DTOs.Reserva;
 using ControleReserva.Domain.Enum;
 
-namespace ControleReserva.Domain.Interface
+namespace ControleReserva.Domain.Interface.Service
 {
     public interface IReservaService
     {

@@ -1,4 +1,4 @@
-﻿using ControleReserva.Domain.Usuario;
+﻿using ControleReserva.Domain.DTOs.Usuario;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControleReservaBack.Controllers
