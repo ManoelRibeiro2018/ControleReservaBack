@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ControleReserva.Domain.Usuario;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ControleReservaBack.Controllers
 {
@@ -6,6 +7,10 @@ namespace ControleReservaBack.Controllers
     [Route("[controller]")]
     public class ReservaController : ControllerBase
     {
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] UsuarioDto usuarioDto)
+        {
 
+        }
     }
 }
