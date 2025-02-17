@@ -1,0 +1,55 @@
+# Ignore arquivos binários e diretórios de build
+bin/
+obj/
+
+# Configurações do Visual Studio e Rider
+.vscode/
+.idea/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.cache
+
+
+# Logs e temporários
+*.log
+*.tlog
+*.cachefile
+
+# Pacotes e dependências
+packages/
+!packages/repositories.config
+.nuget/
+project.lock.json
+
+# Publicação e deploy
+publish/
+*.publishsettings
+
+# Arquivos gerados pelo SDK do .NET
+project.assets.json
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Certificados e credenciais
+*.pfx
+*.snk
+
+# Arquivos do sistema operacional
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Arquivos específicos para desenvolvimento
+local.settings.json
+appsettings.*.json
+!appsettings.json
+secrets.json
+
+# Docker
+**/[Dd]ockerfile
+**/[Dd]ocker-compose*
+.dockerignore
