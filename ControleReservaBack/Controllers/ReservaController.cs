@@ -10,7 +10,7 @@ namespace ControleReservaBack.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] UsuarioDto usuarioDto)
         {
-
+            return Ok();
         }
     }
 }

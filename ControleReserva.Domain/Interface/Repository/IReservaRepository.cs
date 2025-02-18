@@ -1,15 +1,16 @@
 ﻿using ControleReserva.Domain.DTOs.Reserva;
 using ControleReserva.Domain.Enum;
+using ControleReserva.Domain.Model;
 
 namespace ControleReserva.Domain.Interface.Repository
 {
     public interface IReservaRepository
     {
         Task ChangeStatus(int id, Status status);
-        Task Create(ReservaDto entity);
-        Task Update(ReservaDto entity);
+        Task Create(Reserva entity);
+        Task Update(Reserva entity);
         Task Delete(int id);
-        Task<ReservaDto> Get(int id);
-        Task<List<ReservaDto>> GetAll();
+        Task<Reserva> Get(int id);
+        Task<List<Reserva>> GetAll();
     }
 }
