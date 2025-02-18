@@ -170,7 +170,5 @@ namespace ControleReserva.Application.Service
                 return Response.Failure("Erro ao consultar todas as reserva", false, 500);
             }
         }
-
-
     }
 }

@@ -28,8 +28,7 @@ namespace ControleReserva.Infraestructure.Repository
 
         public async Task Create(Reserva entity)
         {
-            _reservaContext.Reservas.Add(entity);
-            await _reservaContext.SaveChangesAsync();
+            await _reservaContext.Reservas.AddAsync(entity);
         }
 
         public async Task Delete(int id)
@@ -44,14 +43,13 @@ namespace ControleReserva.Infraestructure.Repository
 
         public async Task<Reserva> Get(int id)
         {
-            var result = await _reservaContext.Reservas.FirstOrDefaultAsync(x => x.Id == id);
-            return result;
+            return await _reservaContext.Reservas.Include(r => r.Sala).Include(r => r.Usuario)
+                                       .FirstOrDefaultAsync(r => r.Id == id);
         }
 
         public async Task<List<Reserva>> GetAll()
         {
-            var result = await _reservaContext.Reservas.ToListAsync();
-            return result;
+            return await _reservaContext.Reservas.Include(r => r.Sala).Include(r => r.Usuario).ToListAsync();
         }
 
         public async Task Update(Reserva entity)
