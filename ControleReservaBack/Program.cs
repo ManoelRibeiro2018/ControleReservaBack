@@ -24,7 +24,8 @@ builder.Services.AddScoped<IReservaService, ReservaService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ReservaContext>(op => op.UseNpgsql(builder.Configuration.GetConnectionString("Conexao")));
+var conexao = builder.Configuration.GetConnectionString("Conexao");
+builder.Services.AddDbContext<ReservaContext>(op => op.UseNpgsql(conexao));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

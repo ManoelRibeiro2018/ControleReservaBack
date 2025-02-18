@@ -13,6 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\ControleReserva.Application\ControleReserva.Application.csproj" />
 		<ProjectReference Include="..\ControleReserva.Domain\ControleReserva.Domain.csproj" />
 		<ProjectReference Include="..\ControleReserva.Infraestructure\ControleReserva.Infraestructure.csproj" />
 	</ItemGroup>

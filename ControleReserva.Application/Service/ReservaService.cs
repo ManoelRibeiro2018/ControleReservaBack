@@ -2,7 +2,7 @@
 using ControleReserva.Domain.DTOs;
 using ControleReserva.Domain.DTOs.Reserva;
 using ControleReserva.Domain.Enum;
-using ControleReserva.Domain.Interface.Repository;
+using ControleReserva.Domain.Interface;
 using ControleReserva.Domain.Interface.Service;
 using ControleReserva.Domain.Model;
 using Microsoft.Extensions.Logging;
@@ -12,26 +12,28 @@ namespace ControleReserva.Application.Service
 {
     public class ReservaService : IReservaService
     {
-        private readonly IReservaRepository _reservaRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<ReservaService> _logger;
         private readonly ReservaValidator _reservaValidator;
 
-        public ReservaService(IReservaRepository reservaRepository, ILogger<ReservaService> logger)
+        public ReservaService(IUnitOfWork unitOfWork, ILogger<ReservaService> logger, ReservaValidator validationRules)
         {
-            _reservaRepository = reservaRepository;
+            _unitOfWork = unitOfWork;
             _logger = logger;
+            _reservaValidator = validationRules;
         }
 
         public async Task<Response> ChangeStatus(int id, Status status)
         {
             try
             {
-                var reserva = await _reservaRepository.Get(id);
+                var reserva = await _unitOfWork.Reservas.Get(id);
                 if (reserva == null || (reserva.Data - DateTime.Now).TotalHours < 24)
                     return Response.Failure("Reserva só pode ser cancelada com no mínimo 24 horas de antecedência.", false, 404);
 
                 reserva.Status = Status.Cancelada;
-                await _reservaRepository.Update(reserva);
+                await _unitOfWork.Reservas.Update(reserva);
+                await _unitOfWork.CommitAsync();
                 return Response.Successful("Status da reserva atualizado com sucesso", true, 201);
             }
             catch (Exception ex)
@@ -62,14 +64,16 @@ namespace ControleReserva.Application.Service
                     return Response.Failure(sb.ToString(), false, 404);
 
                 }
-                var reservasExistentes = await _reservaRepository.GetAll();
+                var reservasExistentes = await _unitOfWork.Reservas.GetAll();
 
                 if (reservasExistentes.Any(r => r.SalaId == entity.SalaId && r.Data == entity.Data))
                     return Response.Failure("Uma sala só pode ser reservada se não houver conflitos de horário com outras reservas.", false, 404);
 
                 entity.Status = Status.Confirmada;
                 var reserva = Reserva.Map(entity);
-                await _reservaRepository.Create(reserva);
+                await _unitOfWork.Reservas.Create(reserva);
+                await _unitOfWork.CommitAsync();
+
                 return Response.Failure("Reserva criada com sucesso!.", false, 200);
             }
             catch (Exception ex)
@@ -87,7 +91,8 @@ namespace ControleReserva.Application.Service
         {
             try
             {
-                await _reservaRepository.Delete(id);
+                await _unitOfWork.Reservas.Delete(id);
+                await _unitOfWork.CommitAsync();
                 return Response.Failure("Reserva removida com sucesso!", false, 204);
 
             }
@@ -121,7 +126,9 @@ namespace ControleReserva.Application.Service
                 }
 
                 var reserva = Reserva.Map(entity);
-                await _reservaRepository.Update(reserva);
+                await _unitOfWork.Reservas.Update(reserva);
+                await _unitOfWork.CommitAsync();
+
                 return Response.Failure("Reserva atualizada com sucesso!", false, 204);
 
             }
@@ -139,7 +146,7 @@ namespace ControleReserva.Application.Service
         {
             try
             {
-                var reserva = await _reservaRepository.Get(id);
+                var reserva = await _unitOfWork.Reservas.Get(id);
                 return Response.Successful("Sucesso ao consultar", true, 200, reserva);
             }
             catch (Exception ex)
@@ -157,7 +164,7 @@ namespace ControleReserva.Application.Service
         {
             try
             {
-                var reservas = await _reservaRepository.GetAll();
+                var reservas = await _unitOfWork.Reservas.GetAll();
                 return Response.Successful("Sucesso ao consultar", true, 200, reservas);
             }
             catch (Exception ex)
