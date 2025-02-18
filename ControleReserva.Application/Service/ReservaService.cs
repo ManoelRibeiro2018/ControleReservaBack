@@ -6,6 +6,7 @@ using ControleReserva.Domain.Interface.Repository;
 using ControleReserva.Domain.Interface.Service;
 using ControleReserva.Domain.Model;
 using Microsoft.Extensions.Logging;
+using System.Text;
 
 namespace ControleReserva.Application.Service
 {
@@ -55,6 +56,11 @@ namespace ControleReserva.Application.Service
                                      nameof(ReservaService),
                                      nameof(Create),
                                      validationResult.Errors.SelectMany(e => e.ErrorMessage));
+
+                    StringBuilder sb = new();
+                    validationResult.Errors.Select(e => e.ErrorMessage).ToList().ForEach(e => { sb.AppendLine(e); });
+                    return Response.Failure(sb.ToString(), false, 404);
+
                 }
                 var reservasExistentes = await _reservaRepository.GetAll();
 
@@ -73,28 +79,98 @@ namespace ControleReserva.Application.Service
                                nameof(Create),
                                ex.Message);
 
-                return Response.Failure("Erro ao criar reserva", false, 500); 
+                return Response.Failure("Erro ao criar reserva", false, 500);
             }
         }
 
-        public Task<Response> Delete(int id)
+        public async Task<Response> Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _reservaRepository.Delete(id);
+                return Response.Failure("Reserva removida com sucesso!", false, 204);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{ClasseName} - {MethodName} - {Message}",
+                              nameof(ReservaService),
+                              nameof(Delete),
+                              ex.Message);
+
+                return Response.Failure("Erro ao removida reserva", false, 500);
+            }
+        }
+        public async Task<Response> Update(ReservaDto entity)
+        {
+            try
+            {
+                var validationResult = _reservaValidator.Validate(entity);
+
+                if (!validationResult.IsValid)
+                {
+                    _logger.LogError("{ClasseName} - {MethodName} - {Message}",
+                                     nameof(ReservaService),
+                                     nameof(Update),
+                                     validationResult.Errors.SelectMany(e => e.ErrorMessage));
+
+                    StringBuilder sb = new();
+                    validationResult.Errors.Select(e => e.ErrorMessage).ToList().ForEach(e => { sb.AppendLine(e); });
+                    return Response.Failure(sb.ToString(), false, 404);
+
+                }
+
+                var reserva = Reserva.Map(entity);
+                await _reservaRepository.Update(reserva);
+                return Response.Failure("Reserva atualizada com sucesso!", false, 204);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{ClasseName} - {MethodName} - {Message}",
+                              nameof(ReservaService),
+                              nameof(Update),
+                              ex.Message);
+
+                return Response.Failure("Erro ao atualizar reserva", false, 500);
+            }
+        }
+        public async Task<Response> Get(int id)
+        {
+            try
+            {
+                var reserva = await _reservaRepository.Get(id);
+                return Response.Successful("Sucesso ao consultar", true, 200, reserva);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{ClasseName} - {MethodName} - {Message}",
+                                nameof(ReservaService),
+                                nameof(Update),
+                                ex.Message);
+
+                return Response.Failure("Erro ao consultar reserva", false, 500);
+            }
         }
 
-        public Task<ReservaDto> Get(int id)
+        public async Task<Response> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var reservas = await _reservaRepository.GetAll();
+                return Response.Successful("Sucesso ao consultar", true, 200, reservas);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{ClasseName} - {MethodName} - {Message}",
+                                nameof(ReservaService),
+                                nameof(Update),
+                                ex.Message);
+
+                return Response.Failure("Erro ao consultar todas as reserva", false, 500);
+            }
         }
 
-        public Task<List<ReservaDto>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<Response> Update(ReservaDto entity)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

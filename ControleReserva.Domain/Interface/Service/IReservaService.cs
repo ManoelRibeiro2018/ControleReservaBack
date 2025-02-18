@@ -10,7 +10,7 @@ namespace ControleReserva.Domain.Interface.Service
         Task<Response> Create(ReservaDto entity);
         Task<Response> Update(ReservaDto entity);
         Task<Response> Delete(int id);
-        Task<ReservaDto> Get(int id);
-        Task<List<ReservaDto>> GetAll();
+        Task<Response> Get(int id);
+        Task<Response> GetAll();
     }
 }

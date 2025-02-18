@@ -14,11 +14,12 @@
             StatusCode = statusCode
         };
 
-        public static Response Successful(string message, bool success, int statusCode) => new()
+        public static Response Successful(string message, bool success, int statusCode, Object result = null) => new()
         {
             Message = message,
             Success = success,
-            StatusCode = statusCode
+            StatusCode = statusCode,
+            Result = result
         };
     }
 }
